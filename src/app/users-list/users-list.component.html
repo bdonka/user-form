@@ -1,0 +1,28 @@
+<div class="container" *ngIf="user as userList">
+  <table>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Age</th>
+      <th>Hobbies</th>
+      <th>Edit</th>
+      <th>Remove</th>
+    </tr>
+    <tr>
+      <td>{{userList.firstName}}</td>
+      <td>{{userList.lastName}}</td>
+      <td>{{userList.age}}</td>
+      <td>{{userList.hobbies}}</td>
+      <td>
+        <button type="button" mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+      <td>
+        <button type="button" mat-icon-button>
+          <mat-icon>person_remove</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>

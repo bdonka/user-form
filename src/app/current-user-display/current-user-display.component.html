@@ -1,0 +1,27 @@
+<div class="container" *ngIf="userSignal() as currentUser">
+    <div class="title-submitted">
+      <h2>
+        You submitted the following
+      </h2>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-3">First Name</div>
+      <div class="col-xs-9">{{ currentUser.firstName }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Last Name</div>
+      <div class="col-xs-9">{{ currentUser.lastName }}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Age</div>
+      <div class="col-xs-9">{{ currentUser.age}}</div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">Hobbies</div>
+      <div class="col-xs-9">{{ currentUser.hobbies }}</div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary" (click)="openDialog()">Edit</button>
+    <button type="button" class="btn btn-secondary" (click)="onDisplayList()">Show list</button>
+  </div>
