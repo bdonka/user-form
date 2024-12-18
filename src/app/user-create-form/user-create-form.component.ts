@@ -1,9 +1,9 @@
 import { AddFormUserComponent } from './../add-form-user/add-form-user.component';
 
-import { AfterViewInit, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import { User } from '../user.model/user.model';
 import { Router } from '@angular/router';
-import { updateUser, userSignal } from '../user.state';
+import { userSignal, usersList } from '../user.state';
 import { CommonModule } from '@angular/common';
 import { NgForm } from '@angular/forms';
 
@@ -14,7 +14,7 @@ import { NgForm } from '@angular/forms';
   standalone: true,
   imports: [AddFormUserComponent, CommonModule]
 })
-export class UserCreateFormComponent implements AfterViewInit{
+export class UserCreateFormComponent{
   @ViewChild(AddFormUserComponent) addFormUserComponent!: AddFormUserComponent;
 
   user: User = {
@@ -26,29 +26,28 @@ export class UserCreateFormComponent implements AfterViewInit{
 
   constructor(private router: Router) { }
 
-  ngAfterViewInit(): void {
-    if (!this.addFormUserComponent) {
-      console.error('not working')
-    }
-  }
-
   onFormSubmit() {
     const form: NgForm = this.addFormUserComponent.form;
 
     if (form && form.valid) {
-      userSignal.set({
+      const newUser: User = {
         firstName: this.addFormUserComponent.user.firstName,
         lastName: this.addFormUserComponent.user.lastName,
         age: this.addFormUserComponent.user.age,
         hobbies: this.addFormUserComponent.user.hobbies
-      });
-      updateUser({
-        firstName: this.addFormUserComponent.user.firstName,
-        lastName: this.addFormUserComponent.user.lastName,
-        age: this.addFormUserComponent.user.age,
-        hobbies: this.addFormUserComponent.user.hobbies
-      });
+      };
+
+      userSignal.set([...usersList(), newUser]);
+
       this.router.navigate(['/current-user']);
     }
   }
+
+  onDisplayList(): void {
+    this.router.navigate(['/users-list']);
+  }
 }
+
+
+
+///// dodac id usera, wygenerowac go (paczka id), rozpoznawanie id, przechwycic id w edycji i bedzie

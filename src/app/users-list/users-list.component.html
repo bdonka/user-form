@@ -1,4 +1,5 @@
-<div class="container" *ngIf="user as userList">
+<div class="container" *ngIf="users as userList">
+  <button type="button" class="btn btn-primary" (click)="onAddUserForm()">Add next user</button>
   <table>
     <tr>
       <th>First Name</th>
@@ -8,11 +9,11 @@
       <th>Edit</th>
       <th>Remove</th>
     </tr>
-    <tr>
-      <td>{{userList.firstName}}</td>
-      <td>{{userList.lastName}}</td>
-      <td>{{userList.age}}</td>
-      <td>{{userList.hobbies}}</td>
+    <tr *ngFor="let user of userList; let i=index">
+      <td>{{user.firstName}}</td>
+      <td>{{user.lastName}}</td>
+      <td>{{user.age}}</td>
+      <td>{{user.hobbies}}</td>
       <td>
         <button type="button" mat-icon-button>
           <mat-icon>edit</mat-icon>

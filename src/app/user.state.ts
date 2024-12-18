@@ -1,15 +1,22 @@
-import { signal } from '@angular/core';
+import { computed, signal } from '@angular/core';
 import { User } from './user.model/user.model';
 
-const USER_KEY = 'user';
-const savedUser = localStorage.getItem(USER_KEY);
-const initialUser = savedUser ? JSON.parse(savedUser) : null;
+export const userSignal = signal<User[]>([]);
 
-export const userSignal = signal<User | null>(initialUser);
-
-export function updateUser(newUser: User) {
-  console.log('Attempting to update user:', newUser);
-  userSignal.set(newUser);
-  localStorage.setItem(USER_KEY, JSON.stringify(newUser));
-   console.log('User updated and saved to localStorage:', newUser);
+export function updateUser(updatedUsers: User[]) {
+  userSignal.set(updatedUsers);
 }
+
+export function addUser(newUser: User) {
+  const currentUsers = userSignal();
+  userSignal.set([...currentUsers, newUser])
+}
+
+export function editUser(index: number, updatedUser: User) {
+  const currentUsers = userSignal();
+  const newUsers = [...currentUsers];
+  newUsers[index] = updatedUser;
+  userSignal.set(newUsers);
+}
+
+export const usersList = computed(()=> userSignal());

@@ -21,13 +21,14 @@ export class EditModalComponent {
   onFormUpdate() {
     const form: NgForm = this.addFormUserComponent.form;
 
+
     if (form && form.valid) {
-      console.log('nie wiem, czemu nie dziala', { ...this.addFormUserComponent.user })
-      userSignal.update(currentValue => ({
-        ...currentValue,
-        ...this.addFormUserComponent.user
-      }));
-      console.log('Updated Signal:', userSignal());
+      // userSignal.update(currentValue => ({
+      //   ...currentValue,
+      //   ...this.addFormUserComponent.user
+      // }));
+      // console.log('Updated Signal:', userSignal());
+      
       this.dialogRef.close();
     }
   }

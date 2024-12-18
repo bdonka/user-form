@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component} from '@angular/core';
+import { Component, inject} from '@angular/core';
 import { User } from '../user.model/user.model';
 import { userSignal } from '../user.state';
 import { MatIcon } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-list',
@@ -11,11 +12,18 @@ import { MatIcon } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, MatIcon]
 })
+
 export class UsersListComponent {
-  user: User | null = null;
+  users: User[]= [];
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
-    this.user = userSignal();
-    console.log('User on list in OnInit:', this.user)
+    this.users = userSignal();
+    console.log('User on list in OnInit:', this.users)
+  }
+
+
+  onAddUserForm(): void {
+    this.router.navigate(['/create-user']);
   }
 }
