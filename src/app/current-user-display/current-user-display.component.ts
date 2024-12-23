@@ -22,7 +22,6 @@ import { User } from '../user.model/user.model';
 export class CurrentUserDisplayComponent{
   @ViewChild(AddFormUserComponent) addFormUserComponent!: AddFormUserComponent;
 
-
   readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   private readonly cdRef = inject(ChangeDetectorRef);
@@ -38,19 +37,17 @@ export class CurrentUserDisplayComponent{
     })
   }
 
-  openDialog(index: number, user: User): void {
+  openDialog(id: number, user: User): void {
       const dialogRef = this.dialog.open(EditModalComponent, {
         data: user,
       });
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          const updatedUsers = this.users().map((user, i) => {
-            if (i === index) {
-              return result;
-            }
-            return user;
-          })
+          const updatedUsers = this.users().map((existingUser) =>
+            existingUser.id === user.id ? result : existingUser
+          );
+
           userSignal.set(updatedUsers);
         } else {
           console.log('No result from dialog, user not updated.');

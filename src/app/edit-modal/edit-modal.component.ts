@@ -1,10 +1,10 @@
-import { Component, inject, model, ViewChild } from '@angular/core';
+import { User } from './../user.model/user.model';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { User } from '../user.model/user.model';
 import { CommonModule } from '@angular/common';
 import { AddFormUserComponent } from '../add-form-user/add-form-user.component';
-import { NgForm } from '@angular/forms';
-import { userSignal } from '../user.state';
+import { userSignal, usersList } from '../user.state';
+import UserDTO from '../factory/user';
 
 @Component({
   selector: 'app-edit-modal',
@@ -18,17 +18,41 @@ export class EditModalComponent {
   readonly dialogRef = inject(MatDialogRef<AddFormUserComponent>);
   readonly data = inject<User>(MAT_DIALOG_DATA);
 
-  onFormUpdate() {
-    const form: NgForm = this.addFormUserComponent.form;
+  user: User = {
+    id: '',
+    firstName: '',
+    lastName: '',
+    age: 18,
+    hobbies: '',
+  };
 
+
+  ngAfterViewInit() {
+    const form = this.addFormUserComponent.FormGroup;
+    if (form) {
+      const { id, ...rest } = this.data;
+      form.setValue(rest);
+    }
+  }
+
+  onFormUpdate(): void {
+    const form = this.addFormUserComponent.FormGroup;
 
     if (form && form.valid) {
-      // userSignal.update(currentValue => ({
-      //   ...currentValue,
-      //   ...this.addFormUserComponent.user
-      // }));
-      // console.log('Updated Signal:', userSignal());
-      
+      const updatedList = usersList().map((user) => {
+        if (user.id === this.data.id) {
+          const newUser: User = new UserDTO().update(
+            form.get('firstName')?.value,
+            form.get('lastName')?.value,
+            form.get('age')?.value,
+            form.get('hobbies')?.value,
+            user.id
+          )
+          return newUser
+        }
+        return user
+      })
+       userSignal.set(updatedList);
       this.dialogRef.close();
     }
   }
@@ -37,3 +61,6 @@ export class EditModalComponent {
     this.dialogRef.close();
   }
 }
+
+
+//w jaki sposob mam odebrac wartosci, ktore zmienilam w formularzu

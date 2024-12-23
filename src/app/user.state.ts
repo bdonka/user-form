@@ -1,7 +1,7 @@
 import { computed, signal } from '@angular/core';
 import { User } from './user.model/user.model';
 
-export const userSignal = signal<User[]>([]);
+export const userSignal = signal<User[]>(localStorage.getItem('usersList') ? JSON.parse(localStorage.getItem('usersList')!) as User[] : []);
 
 export function updateUser(updatedUsers: User[]) {
   userSignal.set(updatedUsers);

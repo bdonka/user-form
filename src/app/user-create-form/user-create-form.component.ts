@@ -1,3 +1,4 @@
+
 import { AddFormUserComponent } from './../add-form-user/add-form-user.component';
 
 import {Component, ViewChild} from '@angular/core';
@@ -5,7 +6,8 @@ import { User } from '../user.model/user.model';
 import { Router } from '@angular/router';
 import { userSignal, usersList } from '../user.state';
 import { CommonModule } from '@angular/common';
-import { NgForm } from '@angular/forms';
+import { FormGroup} from '@angular/forms';
+import UserDTO from '../factory/user';
 
 @Component({
   selector: 'app-user-create-form',
@@ -18,24 +20,26 @@ export class UserCreateFormComponent{
   @ViewChild(AddFormUserComponent) addFormUserComponent!: AddFormUserComponent;
 
   user: User = {
+    id: '',
     firstName: '',
     lastName: '',
     age: 18,
-    hobbies: [],
+    hobbies: '',
   };
 
   constructor(private router: Router) { }
 
+
   onFormSubmit() {
-    const form: NgForm = this.addFormUserComponent.form;
+    const form: FormGroup = this.addFormUserComponent.form;
 
     if (form && form.valid) {
-      const newUser: User = {
-        firstName: this.addFormUserComponent.user.firstName,
-        lastName: this.addFormUserComponent.user.lastName,
-        age: this.addFormUserComponent.user.age,
-        hobbies: this.addFormUserComponent.user.hobbies
-      };
+      const newUser: User = new UserDTO().create(
+        form.get('firstName')?.value,
+        form.get('lastName')?.value,
+        form.get('age')?.value,
+        form.get('hobbies')?.value
+      )
 
       userSignal.set([...usersList(), newUser]);
 

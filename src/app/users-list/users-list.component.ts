@@ -1,5 +1,6 @@
+import { usersList } from './../user.state';
 import { CommonModule } from '@angular/common';
-import { Component, inject} from '@angular/core';
+import { Component, computed, effect, inject} from '@angular/core';
 import { User } from '../user.model/user.model';
 import { userSignal } from '../user.state';
 import { MatIcon } from '@angular/material/icon';
@@ -14,12 +15,23 @@ import { Router } from '@angular/router';
 })
 
 export class UsersListComponent {
-  users: User[]= [];
   private readonly router = inject(Router);
 
-  ngOnInit(): void {
-    this.users = userSignal();
-    console.log('User on list in OnInit:', this.users)
+  constructor() {
+    effect(() => {
+      localStorage.setItem('usersList', JSON.stringify(this.users()));
+    });
+  }
+
+  users = computed(() => {
+    return userSignal();
+  })
+
+  onRemove(id: User['id']): void {
+    const updatedList = this.users().filter((user) => {
+      return user.id !== id
+    })
+    userSignal.set(updatedList);
   }
 
 

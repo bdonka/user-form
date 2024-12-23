@@ -1,4 +1,4 @@
-<div class="container" *ngIf="users as userList">
+<div class="container" *ngIf="users() as userList">
   <button type="button" class="btn btn-primary" (click)="onAddUserForm()">Add next user</button>
   <table>
     <tr>
@@ -20,7 +20,7 @@
         </button>
       </td>
       <td>
-        <button type="button" mat-icon-button>
+        <button type="button" mat-icon-button (click)="onRemove(user.id)">
           <mat-icon>person_remove</mat-icon>
         </button>
       </td>
